@@ -4,7 +4,7 @@
   "description": "Arcaea Scoring Page",
   "main": "src/index.mjs",
   "scripts": {
-    "start": "node --experimental-modules src/index.mjs",
+    "start": "node --experimental-modules src/index.mjs && cat output/*",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

@@ -9,9 +9,9 @@ import {
 } from './commons.mjs'
 
 const DIFFICULTY_LEVELS = {
-    past: 0,
-    present: 1,
-    future: 2
+    past: 'pst',
+    present: 'prs',
+    future: 'ftr'
 }
 
 const startsWithLevel = string => string.toLowerCase().startsWith('level ')
@@ -42,19 +42,19 @@ const hydrateLines = lines => {
 
 const groupByDifficultyAndName = songs => songs.reduce(
     (result, { difficulty, level, song, artist, constant }) => {
-        if (!result.artist[song]) {
-            result.artist[song] = artist
-            result.level[song] = []
-            result.constant[song] = []
+        if (!result[song]) {
+            result[song] = {
+                artist,
+                levels: {},
+                constants: {},
+                notecount: {}
+            }
         }
-        result.level[song][difficulty] = level
-        result.constant[song][difficulty] = constant
+        result[song].levels[difficulty] = level
+        result[song].constants[difficulty] = constant
+        result[song].notecount[difficulty] = 0
         return result
-    }, {
-        artist: {},
-        level: {},
-        constant: {}
-    }
+    }, {}
 )
 
 const parse = fileSrc => readFileContentsAsString(fileSrc)

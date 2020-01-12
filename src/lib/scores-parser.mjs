@@ -10,7 +10,7 @@ import {
 
 const removeLinesWithoutScores = lines => lines.filter(([first, ...values]) => values.join('') !== '')
 
-const DIFFICULTIES = ['PST', 'PRS', 'FTR']
+const DIFFICULTIES = ['pst', 'prs', 'ftr']
 
 const calcRaw = score => {
     if (score <= 9800) return (score - 9500) / 300
@@ -22,9 +22,7 @@ const calcRaw = score => {
 const calc = score => {
     if (score === null) return null
     score = Math.floor(calcRaw(score) * 10) / 10
-    if (score < 0) return score
-    if (score > 0) return `+${score}`
-    return '0'
+    return score
 }
 
 const groupByDifficultiesAndSongs = ([[dateAndPlayer, ...difficulties], ...songs ]) => {
@@ -32,13 +30,17 @@ const groupByDifficultiesAndSongs = ([[dateAndPlayer, ...difficulties], ...songs
     const player = playerRest.join(' ').trim()
     const scores = songs.map(([song, ...scores]) => ({
         song,
-        ...scores.reduce((scores, score, i) => ({
+        ...scores.reduce((scores, score, i) => {
+            return ({
             ...scores,
-            [difficulties[i]]: Number(score)
-        }), { PST: null, PRS: null, FTR: null })
-    })).reduce((songs, { song, PST, PRS, FTR }) => ({
+            [difficulties[i].toLowerCase()]: Number(score)
+        })}, { pst: null, prs: null, ftr: null })
+    })).reduce((songs, { song, pst, prs, ftr }) => ({
         ...songs,
-        [song]: [PST, PRS, FTR, calc(PST), calc(PRS), calc(FTR)]
+        [song]: {
+            scores: { pst, prs, ftr },
+            modifiers: { pst: calc(pst), prs: calc(prs), ftr: calc(ftr) }
+        }
     }), {})
     return { player, date, scores }
 }

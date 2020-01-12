@@ -17,3 +17,7 @@ export const splitByPipes = string => string.split('|')
 export const isEmpty = string => string.trim() === ''
 
 export const filterEmptyEntries = array => array.filter(e => !isEmpty(e))
+
+export const writeFile = (fileDest, data) => fs.writeFile(fileDest, data).then(() => {
+    console.log(`Wrote file ${fileDest}`)
+})
