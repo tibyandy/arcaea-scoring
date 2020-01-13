@@ -14,6 +14,7 @@ async function run () {
     const scoreData = scoresMerger.merge(songs, playerScores)
 
     writeFile('output/tibyandy-2020-01-04.js', `window.APP.scoreData=\n${JSON.stringify(scoreData).split('},"').join('},\n"').split('{"MetaInfo"').join('{\n"MetaInfo"').split('}}}').join('}}\n}')}\n`)
+    writeFile('output/imports.js', `require('../output/tibyandy-2020-01-04.js')`)
 }
 
 run()
